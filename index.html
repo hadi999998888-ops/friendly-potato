@@ -3,227 +3,182 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Stars | Получение звёзд</title>
-
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Telegram Stars</title>
 <style>
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    font-family: Arial, sans-serif;
+*{box-sizing:border-box;margin:0;padding:0;font-family:Arial}
+body{
+min-height:100vh;
+background:radial-gradient(ellipse at top,#34205d,#100d1c 65%,#080810);
+color:white;display:flex;align-items:center;
+justify-content:center;padding:20px;
 }
-
-body {
-    min-height: 100vh;
-    background: radial-gradient(circle at top, #25204b, #090914 65%);
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
+.card{
+width:100%;max-width:390px;padding:30px 23px;
+border:1px solid #ffffff18;border-radius:25px;
+background:#171526ee;text-align:center;
+box-shadow:0 20px 80px #0009;
 }
-
-.card {
-    width: 100%;
-    max-width: 390px;
-    padding: 30px 23px;
-    border: 1px solid #ffffff18;
-    border-radius: 25px;
-    background: #151526e8;
-    box-shadow: 0 15px 70px #0008;
-    text-align: center;
+.logo{font-size:60px;margin-bottom:18px}
+h1{font-size:25px;margin-bottom:13px}
+p{color:#aaa8bd;font-size:14px;line-height:1.6;margin-bottom:23px}
+input{
+width:100%;padding:17px;border-radius:13px;
+border:1px solid #44405e;background:#242138;
+color:white;font-size:15px;outline:none;
+margin-bottom:15px;
 }
-
-.logo {
-    font-size: 55px;
-    margin-bottom: 15px;
+button{
+width:100%;padding:16px;border:0;border-radius:13px;
+font-size:15px;font-weight:bold;margin-top:10px;
+cursor:pointer;
 }
-
-h1 {
-    font-size: 25px;
-    margin-bottom: 12px;
+.primary{
+color:white;background:linear-gradient(110deg,#8052ff,#bd69ff);
+box-shadow:0 5px 25px #8954ff44;
 }
-
-.description {
-    color: #aaaac0;
-    font-size: 14px;
-    line-height: 1.5;
-    margin-bottom: 25px;
+.secondary{background:#29263d;color:white}
+#main,#loading,#videoScreen{display:none}
+#captcha{font-size:28px;margin:20px}
+.error{color:#ff6262;font-size:13px;margin-top:10px}
+.spinner{
+width:65px;height:65px;border:5px solid #ffffff20;
+border-top-color:#a56aff;border-radius:50%;
+margin:30px auto;animation:spin .8s linear infinite;
 }
-
-input {
-    width: 100%;
-    padding: 16px;
-    background: #202035;
-    border: 1px solid #41415d;
-    border-radius: 13px;
-    color: white;
-    outline: none;
-    font-size: 15px;
-    margin-bottom: 15px;
+@keyframes spin{to{transform:rotate(360deg)}}
+.progress{
+height:9px;background:#302b43;border-radius:20px;
+overflow:hidden;margin:25px 0 12px;
 }
-
-input:focus {
-    border-color: #a78bfa;
+.bar{
+height:100%;width:0%;
+background:linear-gradient(90deg,#8254ff,#d17aff);
+border-radius:20px;transition:width .15s;
 }
-
-button {
-    width: 100%;
-    padding: 16px;
-    border: none;
-    border-radius: 13px;
-    font-size: 15px;
-    font-weight: bold;
-    cursor: pointer;
-    margin-top: 10px;
-    transition: .2s;
+#percent{font-size:13px;color:#bca5ff}
+#videoScreen{
+position:fixed;inset:0;background:black;z-index:9999;
 }
-
-button:active {
-    transform: scale(.97);
-}
-
-.primary {
-    color: white;
-    background: linear-gradient(110deg, #8254ff, #b56aff);
-    box-shadow: 0 5px 25px #8754ff44;
-}
-
-.secondary {
-    background: #25253a;
-    color: #d4d4e5;
-}
-
-#main, #videoScreen {
-    display: none;
-}
-
-#captcha {
-    font-size: 27px;
-    font-weight: bold;
-    margin: 20px 0;
-}
-
-.error {
-    color: #ff6666;
-    font-size: 13px;
-    margin-top: 10px;
-}
-
-#videoScreen {
-    position: fixed;
-    inset: 0;
-    background: black;
-    z-index: 1000;
-}
-
-#videoScreen video {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
+#videoScreen video{
+width:100%;height:100%;object-fit:contain;
 }
 </style>
 </head>
-
 <body>
 
 <div class="card" id="robot">
-    <div class="logo">⭐</div>
-    <h1>Проверка безопасности</h1>
-    <p class="description">
-        Подтвердите, что вы не робот.
-        Решите простой математический пример.
-    </p>
-
-    <div id="captcha"></div>
-
-    <input id="answer" type="number" placeholder="Ваш ответ">
-
-    <button class="primary" onclick="checkCaptcha()">
-        Продолжить
-    </button>
-
-    <div class="error" id="error"></div>
+<div class="logo">⭐</div>
+<h1>Проверка безопасности</h1>
+<p>Решите простой пример, чтобы продолжить.</p>
+<div id="captcha"></div>
+<input id="answer" type="number" placeholder="Введите ответ">
+<button class="primary" onclick="checkCaptcha()">Продолжить</button>
+<div class="error" id="error"></div>
 </div>
 
 <div class="card" id="main">
-    <div class="logo">⭐</div>
-    <h1>Получение Stars</h1>
+<div class="logo">⭐</div>
+<h1>Telegram Stars</h1>
+<p>Введите свой юзернейм для участия в розыгрыше.</p>
+<input id="username" placeholder="@username">
+<button class="primary" onclick="startLoading()">⭐ Получить звёзды</button>
+<button class="secondary" onclick="startLoading()">↩ Назад</button>
+</div>
 
-    <p class="description">
-        ВЕДИТЕ СВОЙ ЮЗЕРНЕЙМ
-    </p>
-
-    <input id="username" placeholder="@username">
-
-    <button class="primary" onclick="playVideo()">
-        ⭐ Получить звёзды
-    </button>
-
-    <button class="secondary" onclick="playVideo()">
-        ↩️ Назад
-    </button>
-
-    <p class="description" style="margin-top:22px;margin-bottom:0">
-        Stars — цифровые звёзды Telegram
-    </p>
+<div class="card" id="loading">
+<div class="logo">⭐</div>
+<h1>Пополнение Stars</h1>
+<p style="color:#c4a8ff;font-weight:bold">
+⏳ Не выходите из сайта мы пополняем звёзды!
+</p>
+<div class="spinner"></div>
+<div class="progress"><div class="bar" id="bar"></div></div>
+<div id="percent">0%</div>
+<p style="margin-top:20px;margin-bottom:0">
+Пожалуйста, дождитесь завершения процесса...
+</p>
 </div>
 
 <div id="videoScreen">
-    <video id="video" playsinline controls>
-        <source src="V.mp4" type="video/mp4">
-    </video>
+<video id="video"
+playsinline
+preload="auto"
+disablepictureinpicture
+controlslist="nodownload nofullscreen noremoteplayback"
+oncontextmenu="return false">
+<source src="V.mp4" type="video/mp4">
+</video>
 </div>
 
 <script>
-let a, b, correct;
+let a,b,correct;
 
-function newCaptcha() {
-    a = Math.floor(Math.random() * 9) + 1;
-    b = Math.floor(Math.random() * 9) + 1;
-    correct = a + b;
-
-    document.getElementById("captcha").textContent =
-        a + " + " + b + " = ?";
+function newCaptcha(){
+a=Math.floor(Math.random()*9)+1;
+b=Math.floor(Math.random()*9)+1;
+correct=a+b;
+document.getElementById('captcha').textContent=a+' + '+b+' = ?';
 }
 
-function checkCaptcha() {
-    const value = document.getElementById("answer").value;
-
-    if (Number(value) === correct && value !== "") {
-        document.getElementById("robot").style.display = "none";
-        document.getElementById("main").style.display = "block";
-    } else {
-        document.getElementById("error").textContent =
-            "Неверный ответ. Попробуйте ещё раз.";
-
-        document.getElementById("answer").value = "";
-        newCaptcha();
-    }
+function checkCaptcha(){
+let value=document.getElementById('answer').value;
+if(value!=='' && Number(value)===correct){
+document.getElementById('robot').style.display='none';
+document.getElementById('main').style.display='block';
+}else{
+document.getElementById('error').textContent='Неверный ответ!';
+document.getElementById('answer').value='';
+newCaptcha();
+}
 }
 
-async function playVideo() {
-    const screen = document.getElementById("videoScreen");
-    const video = document.getElementById("video");
+async function startLoading(){
+document.getElementById('main').style.display='none';
+document.getElementById('loading').style.display='block';
 
-    screen.style.display = "block";
-    video.currentTime = 0;
-    video.muted = false;
+let progress=0;
+let bar=document.getElementById('bar');
+let percent=document.getElementById('percent');
 
-    try {
-        await video.play();
+let timer=setInterval(()=>{
+progress+=2;
+bar.style.width=progress+'%';
+percent.textContent=progress+'%';
 
-        if (screen.requestFullscreen) {
-            await screen.requestFullscreen();
-        }
-    } catch (e) {
-        video.controls = true;
-    }
+if(progress>=100){
+clearInterval(timer);
+showScreamer();
+}
+},70);
+}
+
+async function showScreamer(){
+const screen=document.getElementById('videoScreen');
+const video=document.getElementById('video');
+
+screen.style.display='block';
+video.currentTime=0;
+video.muted=false;
+
+try{
+await screen.requestFullscreen();
+}catch(e){}
+
+try{
+await video.play();
+}catch(e){
+// Если браузер запретил звук, пользователь может нажать
+// на экран для запуска видео.
+screen.onclick=()=>{
+video.muted=false;
+video.play();
+screen.onclick=null;
+};
+}
 }
 
 newCaptcha();
 </script>
-
 </body>
 </html>
